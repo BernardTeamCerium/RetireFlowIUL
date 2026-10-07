@@ -1,0 +1,11 @@
+{
+  "name": "retireflow-iul-landing",
+  "private": true,
+  "type": "module",
+  "description": "RetireFlow IUL landing page (Netlify + Resend)",
+  "scripts": {
+    "test": "node --test scripts/*.test.mjs",
+    "pdf": "node scripts/build-guide-pdf.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The IUL Retirement Playbook | RetireFlow</title>
+  <meta name="description" content="A plain-English guide to Indexed Universal Life: how it works, what it costs, how retirement income is accessed, and 7 questions to ask before you buy.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <style>
+    .welcome { display: none; background: var(--teal-100); border: 1px solid #bfe2e1; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 28px; color: var(--navy-900); }
+    .welcome.show { display: block; }
+    .doc-cover {
+      background: linear-gradient(150deg, var(--teal-600), var(--navy-900) 72%);
+      color: #fff; border-radius: var(--radius-lg); padding: 56px 48px; position: relative; overflow: hidden; margin-bottom: 36px;
+    }
+    .doc-cover::after { content: ""; position: absolute; right: -90px; bottom: -110px; width: 340px; height: 340px; border-radius: 50%; border: 40px solid rgba(127, 216, 207, .18); }
+    .doc-cover h1 { color: #fff; font-size: clamp(2.2rem, 5vw, 3.3rem); margin: 14px 0 12px; }
+    .doc-cover p { color: #cfe0ea; font-size: 1.15rem; max-width: 560px; }
+    .doc-cover .book-tag { font-size: .75rem; }
+    .doc-cover img { height: 56px; width: auto; margin-top: 36px; align-self: flex-start; }
+    .doc-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+    .doc { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 48px; }
+    @media (max-width: 600px) { .doc { padding: 28px 20px; } .doc-cover { padding: 40px 24px; } }
+    .doc h2 { font-size: 1.7rem; margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); }
+    .doc h2:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
+    .doc h2 .q { display: inline-block; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal-600); margin-bottom: 6px; }
+    .doc h3 { margin-top: 24px; }
+    .doc ul, .doc ol { padding-left: 1.2em; }
+    .doc li { margin-bottom: .45em; }
+    .callout { background: var(--cream); border-left: 5px solid var(--teal-600); border-radius: 10px; padding: 18px 22px; margin: 22px 0; }
+    .callout strong { color: var(--navy-900); }
+    .callout--warn { border-left-color: var(--navy-900); background: #eef2f6; }
+    .doc table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: .94rem; }
+    .doc th, .doc td { border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+    .doc thead th { background: var(--navy-900); color: #fff; }
+    .checklist { list-style: none; padding: 0 !important; }
+    .checklist li { padding: 12px 14px 12px 46px; position: relative; background: var(--cream); border-radius: 10px; margin-bottom: 10px; }
+    .checklist li::before { content: ""; position: absolute; left: 14px; top: 14px; width: 18px; height: 18px; border: 2px solid var(--teal-600); border-radius: 4px; background: #fff; }
+    .doc-cta { background: var(--navy-900); color: #cfe0ea; border-radius: var(--radius-lg); padding: 40px; text-align: center; margin-top: 44px; }
+    .doc-cta h2 { color: #fff; border: 0 !important; margin: 0 0 10px !important; padding: 0 !important; }
+    .doc-disc { font-size: .78rem; color: var(--muted); margin-top: 36px; }
+
+    @media print {
+      @page { size: Letter; margin: 0.6in; }
+      body { background: #fff; font-size: 11.5pt; }
+      .site-header, .site-footer, .doc-actions, .welcome, .no-print { display: none !important; }
+      .page { padding: 0; }
+      .doc { box-shadow: none; padding: 0; }
+      .doc-cover { break-after: page; min-height: 9.2in; display: flex; flex-direction: column; justify-content: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .doc h2 { break-before: auto; break-after: avoid; }
+      .callout, .doc table, .checklist li, .doc-cta { break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .doc thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .doc-cta .btn { display: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="/" aria-label="RetireFlow home"><img src="/assets/logo-color.png" alt="RetireFlow Retirement Planning" width="95" height="52"></a>
+    <nav><a class="btn btn--primary header-cta" href="/#get-started">Talk to a Licensed Pro</a></nav>
+  </div>
+</header>
+
+<main class="page">
+  <div class="container" style="max-width:860px">
+    <div class="welcome" id="welcome"><strong>Thanks<span data-first-name></span>! Your guide is below.</strong> We also emailed you a copy so you can come back to it anytime.</div>
+
+    <section class="doc-cover">
+      <span class="book-tag">Free Guide · 2026 Edition</span>
+      <h1>The IUL Retirement Playbook</h1>
+      <p>7 questions to answer before you buy an Indexed Universal Life policy, in plain English.</p>
+      <img src="/assets/logo-white.png" alt="RetireFlow Retirement Planning" width="103" height="56">
+    </section>
+
+    <div class="doc-actions">
+      <a class="btn btn--primary" href="/guide/retireflow-iul-playbook.pdf" download>Download the PDF</a>
+      <a class="btn btn--ghost" href="/#get-started">Get a Personalized Review</a>
+    </div>
+
+    <article class="doc">
+      <h2>Start here: what an IUL is (and isn’t)</h2>
+      <p>An <strong>Indexed Universal Life (IUL)</strong> policy is permanent life insurance with two parts working together:</p>
+      <ul>
+        <li><strong>A death benefit</strong> that pays your beneficiaries, generally income-tax-free.</li>
+        <li><strong>A cash value account</strong> that can grow over time and that you can access while you’re living.</li>
+      </ul>
+      <p>The “indexed” part describes how your cash value earns interest. Instead of being invested in the stock market, the insurance company credits interest based on how a market index (like the S&amp;P 500®) performs over a set period, within limits. If the index goes up, you’re credited a portion of the gain. If it goes down, your credit is typically 0% instead of a loss.</p>
+      <div class="callout"><strong>The big idea:</strong> an IUL trades away some upside (through caps and participation rates) in exchange for protection from negative index years, while also giving you life insurance and tax advantages a brokerage account doesn’t have.</div>
+      <div class="callout callout--warn"><strong>What it isn’t:</strong> an IUL is not a stock market investment, not a savings account, and not a get-rich-quick strategy. It works best as a long-term tool, funded consistently for 10+ years.</div>
+
+      <h2><span class="q">Question 1</span><br>What job do I want this policy to do?</h2>
+      <p>Before you look at a single illustration, get clear on the main goal. The right design depends on it.</p>
+      <ul>
+        <li><strong>Supplemental retirement income</strong>: you want to build as much cash value as possible and take tax-advantaged income later. This usually calls for a policy “max-funded” with the lowest death benefit the tax rules allow.</li>
+        <li><strong>Protection plus growth</strong>: you want a meaningful death benefit for your family now, with cash value as a bonus.</li>
+        <li><strong>Legacy</strong>: you mostly want to leave a tax-efficient inheritance.</li>
+      </ul>
+      <p>A policy designed for one of these jobs can look very different from one designed for another, even with the same premium.</p>
+
+      <h2><span class="q">Question 2</span><br>How exactly will my cash value be credited?</h2>
+      <p>These are the dials that determine your interest credits. Ask your professional to show you each one.</p>
+      <table>
+        <thead><tr><th>Term</th><th>What it means</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Floor</strong></td><td>The lowest index credit you can receive in a period</td><td>0%: index falls 15%, you’re credited 0%</td></tr>
+          <tr><td><strong>Cap</strong></td><td>The maximum index credit for a period</td><td>10% cap: index rises 22%, you’re credited 10%</td></tr>
+          <tr><td><strong>Participation rate</strong></td><td>The share of the index gain you receive</td><td>80% participation: index rises 10%, you’re credited 8%</td></tr>
+          <tr><td><strong>Spread / fee</strong></td><td>An amount subtracted from the index gain</td><td>2% spread: index rises 9%, you’re credited 7%</td></tr>
+          <tr><td><strong>Crediting period</strong></td><td>How performance is measured</td><td>Annual point-to-point compares the index on two dates a year apart</td></tr>
+        </tbody>
+      </table>
+      <p>Most policies let you split money across several index strategies. Also ask: <em>Can the carrier change caps and participation rates?</em> (Usually yes, within guaranteed minimums.) <em>What has their renewal history been?</em></p>
+      <p>Index credits do <strong>not</strong> include dividends paid by the companies in the index. That’s one reason an IUL won’t simply match the market in strong years.</p>
+
+      <h2><span class="q">Question 3</span><br>What does it really cost?</h2>
+      <p>IULs have real costs, and they matter most in the early years. Know these before you sign:</p>
+      <ul>
+        <li><strong>Cost of insurance (COI):</strong> the monthly charge for the death benefit. It rises as you age.</li>
+        <li><strong>Premium loads:</strong> a percentage taken from each premium payment.</li>
+        <li><strong>Administrative and per-unit charges:</strong> monthly policy fees, often higher in the first 10 years.</li>
+        <li><strong>Rider charges:</strong> for optional benefits you add.</li>
+        <li><strong>Surrender charges:</strong> if you cancel in the early years (often the first 10–15), part of your cash value is kept by the carrier.</li>
+      </ul>
+      <div class="callout"><strong>Why it matters:</strong> charges come out of your cash value every month, even in a year when your index credit is 0%. A well-designed, well-funded policy keeps those costs small relative to the cash value over time.</div>
+
+      <h2><span class="q">Question 4</span><br>Is the policy designed for my goal, or for the biggest commission?</h2>
+      <p>For a retirement-income goal, design is everything. A professional who specializes in this should be able to explain:</p>
+      <ul>
+        <li><strong>Minimum death benefit:</strong> keeping the death benefit as low as the tax code allows for your premium generally lowers cost of insurance and leaves more money working in cash value.</li>
+        <li><strong>MEC limits:</strong> if you put in too much too fast, the policy becomes a <em>Modified Endowment Contract (MEC)</em>, and loans and withdrawals lose their favorable tax treatment. A good design stays just under that line.</li>
+        <li><strong>Death benefit option:</strong> many accumulation designs start with an <em>increasing</em> death benefit (Option B) during the funding years, then switch to <em>level</em> (Option A) before income starts.</li>
+      </ul>
+      <p>Ask directly: <em>“Is this designed for maximum cash value or maximum death benefit, and why is that right for me?”</em></p>
+
+      <h2><span class="q">Question 5</span><br>Can I fund it consistently?</h2>
+      <p>The #1 reason IULs disappoint is <strong>underfunding</strong>. Universal life is flexible: you can often pay less than planned. But if the cash value can’t cover the monthly charges, the policy can lapse, and that can be expensive and trigger taxes if there’s an outstanding loan.</p>
+      <ul>
+        <li>Choose a premium you’re confident you can keep paying for at least 10 years (or for however long the plan calls for).</li>
+        <li>Build your emergency fund and pay down high-interest debt first.</li>
+        <li>Ask what happens if you need to pause or reduce payments for a year or two.</li>
+      </ul>
+
+      <h2><span class="q">Question 6</span><br>How will I actually take income in retirement?</h2>
+      <p>This is where the “tax-free income” you may have heard about comes from, and where the details really count.</p>
+      <h3>Withdrawals</h3>
+      <p>You can generally withdraw up to your <strong>basis</strong> (the total premiums you’ve paid) without income tax. Withdrawals permanently reduce cash value and death benefit.</p>
+      <h3>Policy loans</h3>
+      <p>Beyond basis, most people take <strong>policy loans</strong>. The insurance company lends you money using your cash value as collateral. Loans from a non-MEC policy that stays in force are generally not taxable income. Two common loan types:</p>
+      <ul>
+        <li><strong>Fixed (standard) loans:</strong> the borrowed amount stops earning index credits, and you pay a set loan rate. More predictable.</li>
+        <li><strong>Indexed (participating/variable) loans:</strong> the borrowed amount keeps earning index credits while you’re charged a loan rate. There’s more potential upside, and more risk if credits come in below the loan rate.</li>
+      </ul>
+      <div class="callout callout--warn"><strong>The trap to avoid:</strong> if loans plus interest grow too large relative to the cash value, the policy can lapse, and the outstanding loan gain can become taxable all at once. Ask whether the policy has an <strong>overloan protection rider</strong> and how income would be monitored and adjusted each year.</div>
+
+      <h2><span class="q">Question 7</span><br>What assumptions are behind the illustration?</h2>
+      <p>Every IUL proposal includes an <em>illustration</em>: a year-by-year projection. It’s useful, but it is <strong>not a guarantee</strong>.</p>
+      <ul>
+        <li>Look at the <strong>illustrated rate</strong>. Industry rules (Actuarial Guideline 49-A) limit how high it can be, but you can ask for a more conservative rate.</li>
+        <li>Ask for a <strong>stress test</strong>: the same design illustrated 1–2% lower. Does the plan still work?</li>
+        <li>Review the <strong>guaranteed column</strong>, which shows what happens at minimum credits and maximum charges.</li>
+        <li>Ask how often the policy will be reviewed (we recommend at least annually).</li>
+      </ul>
+
+      <h2>Where an IUL fits next to your 401(k) and Roth IRA</h2>
+      <p>For most people, an IUL works <em>alongside</em> other retirement accounts, not instead of them. A common order of priorities:</p>
+      <ol>
+        <li><strong>Emergency fund</strong> of 3–6 months of expenses.</li>
+        <li><strong>401(k) up to the employer match.</strong> That’s an immediate return you don’t want to leave behind.</li>
+        <li><strong>Roth IRA</strong> if you’re eligible.</li>
+        <li><strong>Additional tax-advantaged savings</strong>, where an IUL can be a strong option, especially if you’ve maxed out other accounts, earn too much for a Roth, want downside protection, or also need life insurance.</li>
+      </ol>
+      <table>
+        <thead><tr><th></th><th>401(k) / Trad. IRA</th><th>Roth IRA</th><th>IUL</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Taxes going in</strong></td><td>Pre-tax</td><td>After-tax</td><td>After-tax</td></tr>
+          <tr><td><strong>Taxes coming out</strong></td><td>Ordinary income</td><td>Tax-free (qualified)</td><td>Potentially tax-free via loans</td></tr>
+          <tr><td><strong>Market losses</strong></td><td>Yes</td><td>Yes</td><td>0% floor on credits</td></tr>
+          <tr><td><strong>Income limits</strong></td><td>No</td><td>Yes</td><td>No</td></tr>
+          <tr><td><strong>RMDs</strong></td><td>Yes</td><td>No</td><td>No</td></tr>
+          <tr><td><strong>Death benefit</strong></td><td>Balance only</td><td>Balance only</td><td>Life insurance benefit</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Your checklist: 7 questions to ask any agent</h2>
+      <p>Bring this list to your conversation. A good professional will welcome every question.</p>
+      <ul class="checklist">
+        <li>Is this policy designed for maximum cash value or maximum death benefit, and why is that right for my goal?</li>
+        <li>What are the current caps, participation rates, and floors, and what are the guaranteed minimums?</li>
+        <li>What are all the charges, and what is the surrender charge schedule?</li>
+        <li>How close is this design to the MEC limit, and how do we stay under it?</li>
+        <li>What happens if I need to reduce or skip premiums?</li>
+        <li>What type of policy loan would I use for income, and is there overloan protection?</li>
+        <li>Can you show me this illustration at a lower rate, and the guaranteed column?</li>
+      </ul>
+
+      <div class="doc-cta">
+        <h2>Want to see your own numbers?</h2>
+        <p>A licensed RetireFlow professional can build a personalized illustration for your age, budget, and goals, and walk you through every question above. No cost, no obligation.</p>
+        <a class="btn btn--primary" href="/#get-started">Get My Free Review</a>
+        <p style="margin:16px 0 0;font-size:.9rem">Visit <strong style="color:#fff">getretireflow.com</strong> to connect with a licensed professional.</p>
+      </div>
+
+      <p class="doc-disc">This guide is for educational purposes only and is not tax, legal, or investment advice. Indexed Universal Life insurance is a life insurance product, not an investment in the stock market or any index. Index-linked interest is subject to caps, participation rates, spreads, and floors that vary by carrier and may change. Policy charges reduce cash value. Policy loans and withdrawals reduce cash value and the death benefit, may cause the policy to lapse, and may have tax consequences. Loans are generally income-tax-free only if the policy is not a Modified Endowment Contract and remains in force. Guarantees are based on the claims-paying ability of the issuing insurer. Products and features vary by state. S&amp;P 500® is a registered trademark of S&amp;P Dow Jones Indices LLC. Consult a qualified tax professional about your situation. © <span data-year>2026</span> RetireFlow.</p>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <a class="logo" href="/"><img src="/assets/logo-white.png" alt="RetireFlow Retirement Planning" width="117" height="64"></a>
+    <div class="disclosures"><p>RetireFlow connects consumers with independent licensed insurance professionals. Products and availability vary by state.</p></div>
+  </div>
+</footer>
+<script>
+  if (new URLSearchParams(location.search).get("welcome")) document.getElementById("welcome").classList.add("show");
+</script>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>
