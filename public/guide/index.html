@@ -27,7 +27,7 @@
     .cover-points li { padding-left: 26px; position: relative; }
     .cover-points li::before { content: "✓"; position: absolute; left: 0; color: var(--gold-500); font-weight: 800; }
     .cover-photo { position: relative; }
-    .cover-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .cover-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%; }
     .cover-photo::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(4,28,57,.9), rgba(4,28,57,0) 40%); }
     .cover-foot { position: absolute; left: 40px; bottom: 20px; font-size: .8rem; color: #9fb6c9; z-index: 2; }
     @media (max-width: 700px) {
@@ -83,6 +83,7 @@
       .doc-cover p { font-size: 15pt; max-width: 6in; }
       .cover-points { font-size: 11.5pt; }
       .cover-photo { order: 0; margin: 0 .75in 1in; border-radius: 18px; overflow: hidden; }
+      .cover-photo img { object-position: 50% 8%; }
       .cover-photo::before { display: none; }
       .cover-foot { left: .75in; bottom: .4in; font-size: 10pt; }
       .toc { break-after: page; box-shadow: none; padding: 0; border-radius: 0; margin: 0; }
