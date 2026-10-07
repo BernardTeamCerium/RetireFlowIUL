@@ -155,3 +155,27 @@ export function guideEmail({ lead, siteUrl }) {
     text: `Here's your free guide, ${lead.first_name || "there"}!\n\nDownload the PDF: ${pdfUrl}\nRead online: ${guideUrl}\n\nWant to see your own numbers? Get a free review with a licensed professional: ${reviewUrl}\n\n- The RetireFlow Team`,
   };
 }
+
+// --- 4. New guide-download alert to you -------------------------------------
+export function guideAlertEmail({ lead, siteUrl, submittedAt }) {
+  const rows = [
+    ["Name", lead.first_name],
+    ["Email", lead.email],
+    ["Submitted", submittedAt],
+    ["Source", [lead.utm_source, lead.utm_medium, lead.utm_campaign].filter(Boolean).join(" / ") || "direct"],
+    ["Landing page", lead.landing_page],
+  ];
+  const table = rows
+    .map(([k, v]) => `<tr><td style="padding:8px 10px;border-bottom:1px solid #e6e9ec;color:${MUTED};font-size:14px;white-space:nowrap" valign="top">${esc(k)}</td><td style="padding:8px 10px;border-bottom:1px solid #e6e9ec;font-weight:600;color:${NAVY};font-size:14px">${esc(v || "—")}</td></tr>`)
+    .join("");
+  const body = `
+    <h1 style="margin:0 0 6px;font-size:22px;color:${NAVY};font-weight:800">New guide download: ${esc(lead.first_name || lead.email)}</h1>
+    <p style="margin:0 0 18px;color:${MUTED}">They downloaded <em>The IUL Retirement Playbook</em> and were emailed a copy with an invitation to book a free review. This is a warm lead to follow up with by email.</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${table}</table>
+    <p style="margin:22px 0 0"><a href="mailto:${esc(lead.email)}" style="color:${TEAL};font-weight:700">Email ${esc(lead.first_name || "them")}</a></p>`;
+  return {
+    subject: `New guide download: ${lead.first_name || ""} <${lead.email}>`.replace(/\s+</, " <"),
+    html: layout({ siteUrl, preheader: "Someone just downloaded the IUL Retirement Playbook", body }),
+    text: rows.map(([k, v]) => `${k}: ${v || "-"}`).join("\n"),
+  };
+}

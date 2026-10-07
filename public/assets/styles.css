@@ -355,3 +355,6 @@ table.compare { width: 100%; border-collapse: collapse; min-width: 640px; font-s
 .photo-badge strong { font-size: 2rem; font-weight: 800; color: var(--teal-600); line-height: 1; }
 .photo-badge span { font-size: .85rem; color: var(--navy-900); font-weight: 600; line-height: 1.35; }
 @media (max-width: 560px) { .photo-badge { left: 12px; right: 12px; bottom: 12px; max-width: none; } }
+
+.welcome-dl { background: var(--teal-100); border: 1px solid #bfe2e1; border-radius: var(--radius); padding: 14px 18px; margin: 4px 0 8px; color: var(--navy-900); font-size: .96rem; }
+[hidden] { display: none !important; }

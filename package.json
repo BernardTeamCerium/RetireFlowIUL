@@ -7,5 +7,10 @@
     "test": "node --test scripts/*.test.mjs",
     "pdf": "node scripts/build-guide-pdf.mjs"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "pdf-lib": "^1.17.1"
+  }
 }

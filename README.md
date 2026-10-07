@@ -9,24 +9,25 @@ A lead-generation landing page for Indexed Universal Life (IUL), built for **Net
 | `public/index.html` | The landing page: hero + consultation form, education, comparison table, free-guide opt-in, FAQ, disclosures |
 | `public/thank-you/` | Shown after the consultation form is submitted |
 | `public/guide/` | **The IUL Retirement Playbook**, the free guide (web version) |
-| `public/guide/retireflow-iul-playbook.pdf` | PDF version of the guide (linked in emails) |
+| `public/guide/retireflow-iul-playbook.pdf` | Branded 10-page PDF of the guide. **Downloads automatically** after either form is submitted |
 | `public/privacy/` | Privacy policy **template**. Fill in the `[BRACKETS]` or point links to your existing policy |
 | `netlify/functions/submission-created.mjs` | Runs automatically on every verified form submission and sends the emails |
 | `netlify/lib/agents.mjs` | **Your licensed agents and the states they cover.** Edit this file |
-| `netlify/lib/emails.mjs` | Email templates (confirmation, agent alert, guide delivery) |
+| `netlify/lib/emails.mjs` | Email templates (lead confirmation, new-lead alert, guide delivery, guide-download alert) |
+| `google-sheets/Code.gs` | Google Apps Script that adds every lead to your Google Sheet |
 
 Brand colors (`#041C39` navy, `#077B82` teal, `#F5FAF6` background) and the Manrope font come from getretireflow.com. They're defined once at the top of `public/assets/styles.css`.
 
 ## How the flow works
 
-1. **Consultation form** (`iul-consultation`) → Netlify Forms stores the lead and filters spam. Then the visitor goes to `/thank-you/`.
-2. Netlify triggers `submission-created`, which:
-   - picks a licensed agent for the lead's **state** (from `agents.mjs`),
-   - emails the lead: **"Meet your licensed RetireFlow professional"**, with the agent's name, NPN, phone, email, optional booking link, and the free guide,
-   - emails the **agent** (CC'd to `LEADS_NOTIFY_EMAIL`) a new-lead alert with all the details. Replying goes straight to the lead.
-3. **Guide form** (`guide-request`) → the visitor goes to `/guide/`. They also get a "Here's your free guide" email with the PDF and a CTA to book a review.
+1. **Consultation form** (`iul-consultation`) → Netlify Forms stores the lead and filters spam. The visitor lands on `/thank-you/` and **the PDF guide downloads automatically**.
+2. **Guide form** (`guide-request`) → the visitor lands on `/guide/` and **the PDF downloads automatically**. A "click here" link is there in case the browser blocks it.
+3. For every lead, Netlify triggers `submission-created`, which:
+   - **adds a row to your Google Sheet** with name, email, phone, state, age, goal, consent, assigned agent, a **Status** dropdown, a Notes column, and UTM/ad source,
+   - **emails you a new-lead alert** (`LEADS_NOTIFY_EMAIL`). For consultations, the assigned agent gets it too. Hitting reply emails the lead directly,
+   - emails the lead: the agent introduction ("Meet your licensed RetireFlow professional") or the guide delivery.
 
-Every lead is also saved in **Netlify → Forms**, and you can export it as CSV. UTM parameters (`utm_source`, `utm_campaign`, and so on) are captured automatically for ad tracking.
+The sheet and the emails run independently: if one isn't set up yet or fails, the other still works. Every lead is also kept in **Netlify → Forms** as a backup, and you can export it as CSV.
 
 ## Setup (about 15 minutes)
 
@@ -49,11 +50,30 @@ Every lead is also saved in **Netlify → Forms**, and you can export it as CSV.
 3. **Forms → Enable form detection**, then **redeploy** so Netlify finds the two forms.
 4. *(Optional)* **Domain management**: add a custom domain like `iul.getretireflow.com`.
 
-### 3. Add your agents
+### 3. Google Sheet (leads log)
+1. Open the **RetireFlow IUL Leads** sheet (or create any blank Google Sheet) → **Extensions → Apps Script**.
+2. Replace everything in `Code.gs` with the contents of [`google-sheets/Code.gs`](google-sheets/Code.gs), change `SECRET` to a long random string, and click **Save**.
+3. In the function dropdown, choose **`setup`** → **Run** → approve the permissions. This formats the "Leads" tab (navy header, frozen row, Status dropdown).
+4. **Deploy → New deployment →** gear icon **→ Web app**. Set *Execute as*: **Me** and *Who has access*: **Anyone**, then **Deploy**. Copy the **Web app URL**.
+5. In Netlify, add these environment variables, then redeploy:
+
+   | Variable | Value |
+   |---|---|
+   | `GOOGLE_SHEETS_WEBHOOK_URL` | the Web app URL (`https://script.google.com/macros/s/.../exec`) |
+   | `GOOGLE_SHEETS_SECRET` | the same `SECRET` you put in the script |
+
+To check the connection, run **`testInsert`** in the Apps Script editor. A "Test Lead" row should appear (delete it afterwards). If you edit the script later, use **Deploy → Manage deployments → Edit → New version** so the URL doesn't change.
+
+### 4. Add your agents
 Edit `netlify/lib/agents.mjs`. For each agent, add their name, NPN, email, phone, photo, optional booking link, and licensed states. Until you do, every lead is assigned to "The RetireFlow Team" at `team@getretireflow.com`. Change that default email too.
 
-### 4. Test it
-Submit the form on the live site with your own email. You should get the confirmation, and the agent/notify address should get the lead alert. If not, check **Netlify → Logs → Functions → submission-created** and the **Resend → Emails** log.
+### 5. Test it
+Submit both forms on the live site with your own email. Check that:
+- the PDF downloads,
+- you get the lead's confirmation email **and** the new-lead alert,
+- a new row appears in the Google Sheet.
+
+If something's missing, check **Netlify → Logs → Functions → submission-created**, the **Resend → Emails** log, and **Apps Script → Executions**.
 
 ## Before you launch: compliance checklist
 Insurance marketing is regulated. Have your compliance or legal contact (or your IMO/carrier) review:
@@ -74,6 +94,6 @@ npm test             # unit tests for the email function (Resend is mocked)
 
 To regenerate the guide PDF after editing `public/guide/index.html`:
 ```bash
-npm i -D playwright && npx playwright install chromium
+npm install && npm i --no-save playwright && npx playwright install chromium
 npm run pdf
 ```

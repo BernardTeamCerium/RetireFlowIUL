@@ -14,14 +14,37 @@
     .welcome { display: none; background: var(--teal-100); border: 1px solid #bfe2e1; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 28px; color: var(--navy-900); }
     .welcome.show { display: block; }
     .doc-cover {
-      background: linear-gradient(150deg, var(--teal-600), var(--navy-900) 72%);
-      color: #fff; border-radius: var(--radius-lg); padding: 56px 48px; position: relative; overflow: hidden; margin-bottom: 36px;
+      background: linear-gradient(150deg, var(--teal-600), var(--navy-900) 70%);
+      color: #fff; border-radius: var(--radius-lg); position: relative; overflow: hidden; margin-bottom: 28px;
+      display: grid; grid-template-columns: 1.15fr .85fr; min-height: 460px;
     }
-    .doc-cover::after { content: ""; position: absolute; right: -90px; bottom: -110px; width: 340px; height: 340px; border-radius: 50%; border: 40px solid rgba(127, 216, 207, .18); }
-    .doc-cover h1 { color: #fff; font-size: clamp(2.2rem, 5vw, 3.3rem); margin: 14px 0 12px; }
-    .doc-cover p { color: #cfe0ea; font-size: 1.15rem; max-width: 560px; }
+    .cover-text { padding: 48px 40px 64px; position: relative; z-index: 1; }
+    .cover-logo { height: 56px; width: auto; margin-bottom: 28px; }
+    .doc-cover h1 { color: #fff; font-size: clamp(2.2rem, 5vw, 3.2rem); margin: 12px 0 12px; }
+    .doc-cover p { color: #cfe0ea; font-size: 1.12rem; max-width: 520px; }
     .doc-cover .book-tag { font-size: .75rem; }
-    .doc-cover img { height: 56px; width: auto; margin-top: 36px; align-self: flex-start; }
+    .cover-points { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 8px; color: #e4eef4; font-size: .95rem; }
+    .cover-points li { padding-left: 26px; position: relative; }
+    .cover-points li::before { content: "✓"; position: absolute; left: 0; color: var(--gold-500); font-weight: 800; }
+    .cover-photo { position: relative; }
+    .cover-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .cover-photo::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(4,28,57,.9), rgba(4,28,57,0) 40%); }
+    .cover-foot { position: absolute; left: 40px; bottom: 20px; font-size: .8rem; color: #9fb6c9; z-index: 2; }
+    @media (max-width: 700px) {
+      .doc-cover { grid-template-columns: 1fr; }
+      .cover-photo { height: 240px; order: -1; }
+      .cover-photo::before { background: linear-gradient(0deg, rgba(4,28,57,.9), rgba(4,28,57,0) 50%); }
+    }
+    .toc { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 40px 48px; margin-bottom: 28px; }
+    .toc h2 { font-size: 1.6rem; }
+    .toc ol { counter-reset: t; list-style: none; padding: 0; margin: 0 0 28px; }
+    .toc li { counter-increment: t; display: flex; gap: 14px; align-items: baseline; padding: 10px 0; border-bottom: 1px dashed var(--line); font-weight: 600; color: var(--navy-900); }
+    .toc li::before { content: counter(t, decimal-leading-zero); color: var(--teal-600); font-weight: 800; font-size: .9rem; min-width: 26px; }
+    .toc-note { display: grid; grid-template-columns: 150px 1fr; gap: 22px; align-items: center; background: var(--cream); border-radius: var(--radius); padding: 18px; }
+    .toc-note img { width: 150px; height: 150px; object-fit: cover; border-radius: 12px; }
+    .toc-note p { margin: 0; font-size: .95rem; color: var(--ink); }
+    @media (max-width: 600px) { .toc { padding: 28px 20px; } .toc-note { grid-template-columns: 1fr; } }
+    .back-cover { display: none; }
     .doc-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
     .doc { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 48px; }
     @media (max-width: 600px) { .doc { padding: 28px 20px; } .doc-cover { padding: 40px 24px; } }
@@ -45,16 +68,39 @@
     .doc-disc { font-size: .78rem; color: var(--muted); margin-top: 36px; }
 
     @media print {
-      @page { size: Letter; margin: 0.6in; }
+      @page { size: Letter; margin: 0.75in 0.6in 0.7in; }
+      @page :first { margin: 0; }
       body { background: #fff; font-size: 11.5pt; }
-      .site-header, .site-footer, .doc-actions, .welcome, .no-print { display: none !important; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .site-header, .site-footer, .doc-actions, .welcome, .no-print, .doc-cta { display: none !important; }
       .page { padding: 0; }
-      .doc { box-shadow: none; padding: 0; }
-      .doc-cover { break-after: page; min-height: 9.2in; display: flex; flex-direction: column; justify-content: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .doc h2 { break-before: auto; break-after: avoid; }
-      .callout, .doc table, .checklist li, .doc-cta { break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .doc thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .doc-cta .btn { display: none; }
+      .page .container { max-width: none; padding: 0; }
+      .doc { box-shadow: none; padding: 0; border-radius: 0; }
+      .doc-cover { break-after: page; border-radius: 0; margin: 0; height: 11in; min-height: 0; grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      .cover-text { padding: .8in .75in .3in; }
+      .cover-logo { height: 70px; margin-bottom: .45in; }
+      .doc-cover h1 { font-size: 42pt; line-height: 1.05; }
+      .doc-cover p { font-size: 15pt; max-width: 6in; }
+      .cover-points { font-size: 11.5pt; }
+      .cover-photo { order: 0; margin: 0 .75in 1in; border-radius: 18px; overflow: hidden; }
+      .cover-photo::before { display: none; }
+      .cover-foot { left: .75in; bottom: .4in; font-size: 10pt; }
+      .toc { break-after: page; box-shadow: none; padding: 0; border-radius: 0; margin: 0; }
+      .toc h2 { font-size: 24pt; margin-top: .1in; }
+      .toc li { padding: 9px 0; font-size: 12pt; }
+      .doc h2 { break-after: avoid; }
+      .doc h2:not(:first-of-type) { break-before: auto; }
+      .callout, .doc table, .checklist li, .toc-note { break-inside: avoid; }
+      .back-cover {
+        display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        break-before: page; height: 9.4in; background: linear-gradient(150deg, var(--teal-600), var(--navy-900) 70%);
+        color: #fff; border-radius: 18px; padding: .8in;
+      }
+      .back-cover img.logo-w { height: 84px; width: auto; margin-bottom: .5in; }
+      .back-cover h2 { color: #fff; font-size: 28pt; border: 0 !important; margin: 0 0 14px !important; padding: 0 !important; }
+      .back-cover p { color: #cfe0ea; font-size: 13pt; max-width: 5.6in; }
+      .back-cover .url { margin-top: .3in; display: inline-block; background: #fff; color: var(--navy-900); font-weight: 800; font-size: 15pt; padding: 14px 30px; border-radius: 12px; }
+      .back-cover .small { font-size: 9pt; color: #9fb6c9; margin-top: .5in; }
       a { color: inherit; text-decoration: none; }
     }
   </style>
@@ -69,17 +115,51 @@
 
 <main class="page">
   <div class="container" style="max-width:860px">
-    <div class="welcome" id="welcome"><strong>Thanks<span data-first-name></span>! Your guide is below.</strong> We also emailed you a copy so you can come back to it anytime.</div>
+    <div class="welcome" id="welcome">
+      <strong>Thanks<span data-first-name></span>! Your guide is on its way.</strong>
+      <span data-download-notice hidden>Your PDF download should start automatically. If it doesn’t, <a href="/guide/retireflow-iul-playbook.pdf" download="RetireFlow-IUL-Retirement-Playbook.pdf" data-auto-download>click here to download it</a>.</span>
+      We also emailed you a copy, and you can read it right here below.
+    </div>
 
     <section class="doc-cover">
-      <span class="book-tag">Free Guide · 2026 Edition</span>
-      <h1>The IUL Retirement Playbook</h1>
-      <p>7 questions to answer before you buy an Indexed Universal Life policy, in plain English.</p>
-      <img src="/assets/logo-white.png" alt="RetireFlow Retirement Planning" width="103" height="56">
+      <div class="cover-text">
+        <img class="cover-logo" src="/assets/logo-white.png" alt="RetireFlow Retirement Planning" width="103" height="56">
+        <span class="book-tag">Free Guide · 2026 Edition</span>
+        <h1>The IUL Retirement Playbook</h1>
+        <p>7 questions to answer before you buy an Indexed Universal Life policy, in plain English.</p>
+        <ul class="cover-points">
+          <li>How caps, floors &amp; participation rates really work</li>
+          <li>The true costs, and how good design keeps them low</li>
+          <li>How tax-advantaged retirement income is accessed</li>
+          <li>A 7-question checklist to bring to any agent</li>
+        </ul>
+      </div>
+      <div class="cover-photo"><img src="/assets/couple-porch.jpg" alt="" width="1000" height="1000"></div>
+      <div class="cover-foot">Compliments of <strong>RetireFlow</strong> · getretireflow.com</div>
+    </section>
+
+    <section class="toc">
+      <h2>Inside this guide</h2>
+      <ol>
+        <li><span>Start here: what an IUL is (and isn’t)</span></li>
+        <li><span>Q1 · What job do I want this policy to do?</span></li>
+        <li><span>Q2 · How exactly will my cash value be credited?</span></li>
+        <li><span>Q3 · What does it really cost?</span></li>
+        <li><span>Q4 · Is the policy designed for my goal?</span></li>
+        <li><span>Q5 · Can I fund it consistently?</span></li>
+        <li><span>Q6 · How will I actually take income in retirement?</span></li>
+        <li><span>Q7 · What assumptions are behind the illustration?</span></li>
+        <li><span>Where an IUL fits next to your 401(k) and Roth IRA</span></li>
+        <li><span>Your checklist: 7 questions to ask any agent</span></li>
+      </ol>
+      <div class="toc-note">
+        <img src="/assets/couple-kitchen.jpg" alt="" width="1000" height="1000">
+        <p><strong>A note from RetireFlow.</strong> You’ve worked hard for what you’ve saved. This guide is designed to help you make a confident, informed decision about whether an IUL belongs in your plan, without the jargon or the sales pressure. Take your time, and bring your questions to a licensed professional who will show you real numbers.</p>
+      </div>
     </section>
 
     <div class="doc-actions">
-      <a class="btn btn--primary" href="/guide/retireflow-iul-playbook.pdf" download>Download the PDF</a>
+      <a class="btn btn--primary" href="/guide/retireflow-iul-playbook.pdf" download="RetireFlow-IUL-Retirement-Playbook.pdf">Download the PDF</a>
       <a class="btn btn--ghost" href="/#get-started">Get a Personalized Review</a>
     </div>
 
@@ -207,6 +287,14 @@
       </div>
 
       <p class="doc-disc">This guide is for educational purposes only and is not tax, legal, or investment advice. Indexed Universal Life insurance is a life insurance product, not an investment in the stock market or any index. Index-linked interest is subject to caps, participation rates, spreads, and floors that vary by carrier and may change. Policy charges reduce cash value. Policy loans and withdrawals reduce cash value and the death benefit, may cause the policy to lapse, and may have tax consequences. Loans are generally income-tax-free only if the policy is not a Modified Endowment Contract and remains in force. Guarantees are based on the claims-paying ability of the issuing insurer. Products and features vary by state. S&amp;P 500® is a registered trademark of S&amp;P Dow Jones Indices LLC. Consult a qualified tax professional about your situation. © <span data-year>2026</span> RetireFlow.</p>
+      <section class="back-cover">
+        <img class="logo-w" src="/assets/logo-white.png" alt="RetireFlow Retirement Planning" width="154" height="84">
+        <h2>Ready to see your own numbers?</h2>
+        <p>A licensed RetireFlow professional in your state can build a personalized illustration for your age, budget, and goals, and walk through every question in this guide with you.</p>
+        <p><strong style="color:#fff">No cost. No obligation. No pressure.</strong></p>
+        <span class="url">getretireflow.com</span>
+        <p class="small">Let’s plan a retirement that flows.</p>
+      </section>
     </article>
   </div>
 </main>

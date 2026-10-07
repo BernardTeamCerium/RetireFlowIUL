@@ -62,7 +62,10 @@
 
     var data = new FormData(form);
     var body = new URLSearchParams(data).toString();
-    try { sessionStorage.setItem("rf_first_name", data.get("first_name") || ""); } catch (e2) {}
+    try {
+      sessionStorage.setItem("rf_first_name", data.get("first_name") || "");
+      sessionStorage.setItem("rf_auto_download", "1"); // the next page starts the guide download
+    } catch (e2) {}
 
     fetch("/", {
       method: "POST",
@@ -115,6 +118,17 @@
     var n = "";
     try { n = sessionStorage.getItem("rf_first_name") || ""; } catch (e3) {}
     if (n) nameSlot.textContent = ", " + n.trim().split(" ")[0];
+  }
+
+  // ---- Auto-download the guide right after an opt-in -----------------------
+  var dl = document.querySelector("[data-auto-download]");
+  if (dl) {
+    var pending = false;
+    try { pending = sessionStorage.getItem("rf_auto_download") === "1"; sessionStorage.removeItem("rf_auto_download"); } catch (e4) {}
+    if (pending || new URLSearchParams(window.location.search).get("download") === "1") {
+      document.querySelectorAll("[data-download-notice]").forEach(function (el) { el.hidden = false; });
+      setTimeout(function () { dl.click(); }, 700);
+    }
   }
 
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });

@@ -22,4 +22,4 @@
 [[headers]]
   for = "/guide/*.pdf"
   [headers.values]
-    Content-Disposition = "inline; filename=\"RetireFlow-IUL-Retirement-Playbook.pdf\""
+    Content-Disposition = "attachment; filename=\"RetireFlow-IUL-Retirement-Playbook.pdf\""
