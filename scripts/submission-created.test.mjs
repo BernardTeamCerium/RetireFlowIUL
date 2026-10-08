@@ -43,7 +43,7 @@ test("consultation: confirmation to lead, alert to agent + notify, row in sheet"
   assert.equal(confirm.headers.Authorization, "Bearer re_test");
   assert.equal(confirm.headers["Idempotency-Key"], "sub123-confirm");
   assert.deepEqual(confirm.body.to, ["pat@example.com"]);
-  assert.match(confirm.body.subject, /Pat, meet your licensed RetireFlow professional/);
+  assert.match(confirm.body.subject, /Pat, here’s what happens next/);
   assert.deepEqual(alert.body.to, ["team@getretireflow.com"]);
   assert.deepEqual(alert.body.cc, ["owner@getretireflow.com"]);
   assert.equal(alert.body.reply_to, "pat@example.com");
