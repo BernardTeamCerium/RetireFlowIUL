@@ -77,7 +77,7 @@ If something's missing, check **Netlify → Logs → Functions → submission-cr
 
 ## Before you launch: compliance checklist
 Insurance marketing is regulated. Have your compliance or legal contact (or your IMO/carrier) review:
-- [ ] The TCPA consent language on the form (it's in `public/index.html`)
+- [ ] The consent language on both forms (in `public/index.html`). If you change it, update the `consent_version` hidden fields so each lead records which wording they agreed to
 - [ ] The footnoted disclosures in the page footer and the guide
 - [ ] The privacy policy (`public/privacy/`)
 - [ ] Any state-specific advertising rules for life insurance in the states you market in

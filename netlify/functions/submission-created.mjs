@@ -91,7 +91,9 @@ export const handler = async (event) => {
       state: lead.state,
       age_range: lead.age_range,
       goal: lead.goal,
-      consent: lead.consent === "yes",
+      consent: lead.consent === "yes"
+        ? `Yes: ${formName === "iul-consultation" ? "call, text & email" : "email only"} (form v${lead.consent_version || "?"})`
+        : "",
       agent_name: agent?.name,
       agent_email: agent?.email,
       utm_source: lead.utm_source,

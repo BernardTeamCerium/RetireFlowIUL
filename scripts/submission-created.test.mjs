@@ -31,7 +31,7 @@ beforeEach(() => {
 const event = (form_name, data) => ({ body: JSON.stringify({ payload: { id: "sub123", form_name, created_at: "2026-10-07T12:00:00Z", data } }) });
 const consult = {
   first_name: "Pat", last_name: "Lee", email: "pat@example.com", phone: "(555) 555-1212",
-  state: "TX", age_range: "50–59", goal: "Tax-free retirement income", consent: "yes", utm_source: "facebook",
+  state: "TX", age_range: "50–59", goal: "Tax-free retirement income", consent: "yes", consent_version: "2026-10-08", utm_source: "facebook",
 };
 
 test("consultation: confirmation to lead, alert to agent + notify, row in sheet", async () => {
@@ -54,7 +54,7 @@ test("consultation: confirmation to lead, alert to agent + notify, row in sheet"
   assert.equal(row.lead_type, "Consultation");
   assert.equal(row.submission_id, "sub123");
   assert.equal(row.phone, "(555) 555-1212");
-  assert.equal(row.consent, true);
+  assert.equal(row.consent, "Yes: call, text & email (form v2026-10-08)");
   assert.equal(row.agent_name, "The RetireFlow Team");
   assert.equal(row.utm_source, "facebook");
 });

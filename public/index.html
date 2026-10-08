@@ -115,8 +115,9 @@
 
         <label class="consent">
           <input type="checkbox" name="consent" value="yes" required>
-          <span>By checking this box and clicking “Get My Free Review,” I agree that RetireFlow and its licensed insurance professionals may contact me at the number and email provided, including by calls and texts that may use automated technology, about insurance products. Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out. See our <a href="/privacy/">Privacy Policy</a>.</span>
+          <span><strong>Yes, please contact me.</strong> By checking this box and clicking “Get My Free Review,” I agree to be contacted by a licensed insurance professional working with RetireFlow by <strong>phone call, text message, and email</strong> at the phone number and email address I provided, to schedule a free educational meeting about Indexed Universal Life (IUL) insurance and how it may help with my retirement goals. I understand this meeting is <strong>strictly informational, not a sales call</strong>, and I am under <strong>no obligation to buy anything</strong>. Calls and texts may be made using automated technology. Consent is not a condition of any purchase. Message frequency varies; message and data rates may apply. Reply STOP to opt out of texts at any time. See our <a href="/privacy/">Privacy Policy</a>.</span>
         </label>
+        <input type="hidden" name="consent_version" value="2026-10-08">
 
         <p class="form-error" role="alert"></p>
         <button class="btn btn--primary btn--block" type="submit">Get My Free Review →</button>
@@ -339,9 +340,14 @@
         <label class="hidden" for="g_email">Email</label>
         <input id="g_email" name="email" type="email" placeholder="Email address" autocomplete="email" required>
         <button class="btn btn--gold" type="submit">Send My Free Guide</button>
+        <label class="consent consent--dark">
+          <input type="checkbox" name="consent" value="yes" required>
+          <span>I agree to receive the free guide and to be contacted <strong>by email</strong> by a licensed insurance professional working with RetireFlow, who may invite me to a free educational meeting about IULs. It’s strictly informational, not a sales call, with no obligation to buy. I can unsubscribe at any time.</span>
+        </label>
+        <input type="hidden" name="consent_version" value="2026-10-08">
       </form>
       <p class="form-error" role="alert" style="color:#ffb4a8"></p>
-      <p class="guide-fine">Your guide downloads instantly, and we’ll email you a copy plus occasional retirement-planning tips. Unsubscribe anytime. <a href="/privacy/">Privacy Policy</a>.</p>
+      <p class="guide-fine">Your guide downloads instantly, and we’ll email you a copy. <a href="/privacy/">Privacy Policy</a>.</p>
     </div>
   </div>
 </section>
@@ -389,7 +395,7 @@
     </div>
     <div class="process">
       <div class="process-step reveal"><span class="n">Step 1</span><h3>Tell us about you</h3><p>Answer a few quick questions. It takes about 60 seconds.</p></div>
-      <div class="process-step reveal"><span class="n">Step 2</span><h3>Meet your professional</h3><p>We match you with a licensed insurance professional in your state and email you their details right away.</p></div>
+      <div class="process-step reveal"><span class="n">Step 2</span><h3>Meet your professional</h3><p>A licensed professional in your state contacts you by phone, text, or email to schedule a free educational meeting.</p></div>
       <div class="process-step reveal"><span class="n">Step 3</span><h3>See your numbers</h3><p>Get a personalized illustration showing how a policy could fit your goals and budget.</p></div>
       <div class="process-step reveal"><span class="n">Step 4</span><h3>Decide on your terms</h3><p>Take your time. There’s no cost and no obligation, ever.</p></div>
     </div>
@@ -426,7 +432,7 @@
       </details>
       <details>
         <summary>Who will contact me, and will I be pressured?</summary>
-        <div><p>After you submit the form, we’ll email you the name and contact details of the licensed insurance professional you’re matched with. They’ll reach out to schedule a short conversation. There’s no cost and no obligation, and you can opt out at any time.</p></div>
+        <div><p>After you submit the form, we’ll email you the name and contact details of the licensed insurance professional you’re matched with. They’ll reach out by phone, text, or email to schedule a free educational meeting about IULs. It’s strictly informational, not a sales call. There’s no cost and no obligation to buy, and you can opt out at any time.</p></div>
       </details>
     </div>
   </div>
@@ -437,7 +443,7 @@
   <div class="container">
     <div class="final-cta reveal">
       <h2>Your retirement deserves a plan that goes with the flow</h2>
-      <p>Find out in one short conversation whether an IUL could help you grow, protect, and enjoy what you’ve worked for.</p>
+      <p>Find out in one free, educational meeting whether an IUL could help you grow, protect, and enjoy what you’ve worked for. Strictly informational, with no obligation to buy.</p>
       <div class="actions">
         <a class="btn btn--gold" href="#get-started">Get My Free Review</a>
         <a class="btn btn--ghost" href="#guide">Download the Free Guide</a>

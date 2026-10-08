@@ -74,8 +74,8 @@ export function leadConfirmationEmail({ lead, agent, siteUrl }) {
     ${agentCard(agent, siteUrl)}
     <p style="margin:24px 0 8px"><strong style="color:${NAVY}">What happens next</strong></p>
     <ol style="margin:0 0 8px;padding-left:20px">
-      <li style="margin-bottom:6px">${esc(agent.name.startsWith("The ") ? "Your professional" : agent.name.split(" ")[0])} will reach out by phone, text, or email, usually within one business day.</li>
-      <li style="margin-bottom:6px">You’ll have a short, no-pressure conversation about your goals${lead.goal ? ` (you told us: <em>${esc(lead.goal)}</em>)` : ""}.</li>
+      <li style="margin-bottom:6px">${esc(agent.name.startsWith("The ") ? "Your professional" : agent.name.split(" ")[0])} will reach out by phone, text, or email, usually within one business day, to schedule your free educational meeting.</li>
+      <li style="margin-bottom:6px">You’ll learn how an IUL works and whether it fits your goals${lead.goal ? ` (you told us: <em>${esc(lead.goal)}</em>)` : ""}. The meeting is strictly informational, not a sales call.</li>
       <li>You’ll get a personalized illustration showing how a policy could fit your budget. No cost and no obligation.</li>
     </ol>
     ${cta}
@@ -93,7 +93,7 @@ export function leadConfirmationEmail({ lead, agent, siteUrl }) {
       agent.email ? `Email: ${agent.email}` : "",
       agent.bookingUrl ? `Book a time: ${agent.bookingUrl}` : "",
       ``,
-      `They'll reach out, usually within one business day, for a short, no-pressure conversation.`,
+      `They'll reach out by phone, text, or email, usually within one business day, to schedule a free educational meeting. It's strictly informational, not a sales call, and there's no obligation to buy.`,
       ``,
       `Your free guide, The IUL Retirement Playbook: ${guideUrl}`,
       ``,
@@ -111,7 +111,7 @@ export function agentNotificationEmail({ lead, agent, siteUrl, submittedAt }) {
     ["State", lead.state],
     ["Age", lead.age_range],
     ["Top goal", lead.goal],
-    ["TCPA consent", lead.consent === "yes" ? "Yes (checked on form)" : "No"],
+    ["Contact consent", lead.consent === "yes" ? `Yes: call, text & email (form v${lead.consent_version || "?"})` : "No"],
     ["Assigned to", agent.name],
     ["Submitted", submittedAt],
     ["Source", [lead.utm_source, lead.utm_medium, lead.utm_campaign].filter(Boolean).join(" / ") || "direct"],
@@ -161,6 +161,7 @@ export function guideAlertEmail({ lead, siteUrl, submittedAt }) {
   const rows = [
     ["Name", lead.first_name],
     ["Email", lead.email],
+    ["Contact consent", lead.consent === "yes" ? `Yes: email only (form v${lead.consent_version || "?"})` : "No"],
     ["Submitted", submittedAt],
     ["Source", [lead.utm_source, lead.utm_medium, lead.utm_campaign].filter(Boolean).join(" / ") || "direct"],
     ["Landing page", lead.landing_page],

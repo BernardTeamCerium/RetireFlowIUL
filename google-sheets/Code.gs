@@ -26,7 +26,7 @@ const SHEET_NAME = "Leads";
 
 const HEADERS = [
   "Received (ET)", "Lead Type", "First Name", "Last Name", "Email", "Phone",
-  "State", "Age", "Top Goal", "TCPA Consent", "Assigned Agent", "Agent Email",
+  "State", "Age", "Top Goal", "Contact Consent", "Assigned Agent", "Agent Email",
   "Status", "Notes",
   "UTM Source", "UTM Medium", "UTM Campaign", "UTM Content", "UTM Term",
   "Landing Page", "Submission ID",
@@ -54,7 +54,7 @@ function doPost(e) {
     const row = [
       Utilities.formatDate(received, "America/New_York", "yyyy-MM-dd h:mm a"),
       lead.lead_type, lead.first_name, lead.last_name, lead.email, lead.phone,
-      lead.state, lead.age_range, lead.goal, lead.consent ? "Yes" : "",
+      lead.state, lead.age_range, lead.goal, lead.consent === true ? "Yes" : (lead.consent || ""),
       lead.agent_name, lead.agent_email,
       "New", "",
       lead.utm_source, lead.utm_medium, lead.utm_campaign, lead.utm_content, lead.utm_term,
