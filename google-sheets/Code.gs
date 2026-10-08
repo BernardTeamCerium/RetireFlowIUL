@@ -39,6 +39,8 @@ function doPost(e) {
   try {
     const lead = JSON.parse((e && e.postData && e.postData.contents) || "{}");
     if (lead.secret !== SECRET) return json_({ ok: false, error: "unauthorized" });
+    // Connection test from the site's /.netlify/functions/lead-check page (adds no row).
+    if (lead.ping) return json_({ ok: true, pong: true, sheet: getSheet_().getName() });
 
     const sheet = getSheet_();
     const idCol = HEADERS.indexOf("Submission ID") + 1;

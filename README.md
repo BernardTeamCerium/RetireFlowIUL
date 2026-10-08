@@ -67,6 +67,9 @@ To check the connection, run **`testInsert`** in the Apps Script editor. A "Test
 ### 4. Add your agents
 Edit `netlify/lib/agents.mjs`. For each agent, add their name, NPN, email, phone, photo, optional booking link, and licensed states. Until you do, every lead is assigned to "The RetireFlow Team" at `team@getretireflow.com`. Change that default email too.
 
+### Setup check page
+Open **`https://YOUR-SITE/.netlify/functions/lead-check`**. It shows which Netlify environment variables are set (values are never shown) and tests the Google Sheet connection without adding a row: wrong password, wrong URL, or “Who has access” not set to “Anyone”.
+
 ### 5. Test it
 Submit both forms on the live site with your own email. Check that:
 - the PDF downloads,
