@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------------------
-// Licensed professionals that leads are routed to.
+// Partnered licensed agents that leads are routed to. The lead is NOT told
+// who their agent is (the confirmation email is generic); the assigned agent
+// gets the new-lead alert email and is recorded in the Google Sheet.
 //
 // EDIT THIS LIST with your real agents before launch.
 //   states:     two-letter codes the agent is licensed in, or ["*"] for any state
-//   npn:        National Producer Number (shown in the confirmation email)
-//   photo:      absolute URL or a path under /public (e.g. "/assets/agents/jane.jpg")
-//   bookingUrl: optional calendar link (Calendly, Cal.com, GHL, etc.)
+//   npn:        National Producer Number (shown in the new-lead alert)
 //
 // Routing: the lead goes to an agent licensed in their state. If several
 // agents match, one is picked consistently from the lead's email, so leads
@@ -21,8 +21,6 @@ export const AGENTS = [
     npn: "",
     email: "team@getretireflow.com",
     phone: "",
-    photo: "",
-    bookingUrl: "",
     states: ["*"],
   },
   // Example: copy, fill in, and remove the comment markers.
@@ -33,8 +31,6 @@ export const AGENTS = [
   //   npn: "12345678",
   //   email: "jane@getretireflow.com",
   //   phone: "(555) 555-1234",
-  //   photo: "/assets/agents/jane-smith.jpg",
-  //   bookingUrl: "https://calendly.com/jane-retireflow/intro",
   //   states: ["TX", "FL", "GA"],
   // },
 ];

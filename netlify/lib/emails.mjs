@@ -69,36 +69,26 @@ function stepRow(n, title, text) {
   </tr>`;
 }
 
-export function leadConfirmationEmail({ lead, agent, siteUrl }) {
+export function leadConfirmationEmail({ lead, siteUrl }) {
   const first = esc(lead.first_name || "there");
   const guideUrl = abs(siteUrl, "/guide/");
   const pdfUrl = abs(siteUrl, "/guide/retireflow-iul-playbook.pdf");
-  const isTeam = agent.name.startsWith("The ");
-  const who = esc(isTeam ? "Your licensed professional" : agent.name.split(" ")[0]);
-  const fromLine = agent.phone ? ` from <strong>${esc(agent.phone)}</strong>` : "";
-  const booking = agent.bookingUrl
-    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 26px;background:${MINT};border-radius:12px"><tr><td style="padding:20px 22px;font-family:Manrope,Arial,sans-serif;font-size:15px;line-height:1.55">
-        <strong style="color:${NAVY};font-size:16px">Prefer to pick your own time?</strong><br>Skip the phone tag and book your free educational meeting directly:
-        <div style="margin-top:14px">${button(agent.bookingUrl, "Schedule My Meeting")}</div>
-      </td></tr></table>`
-    : "";
 
   const body = `
     <h1 style="margin:0 0 12px;font-size:26px;line-height:1.25;color:${NAVY};font-weight:800">You’re all set, ${first}! Here’s what happens next.</h1>
-    <p style="margin:0 0 22px">Thank you for requesting your free IUL review. We’ve matched you with a licensed insurance professional in <strong>${esc(lead.state || "your state")}</strong> who will walk you through how an Indexed Universal Life policy works and whether it could fit your retirement plan.</p>
+    <p style="margin:0 0 22px">Thank you for requesting your free IUL review. We’re connecting you with one of our <strong>partnered licensed insurance agents</strong> in ${lead.state ? `<strong>${esc(lead.state)}</strong>` : "your state"}, who will walk you through how an Indexed Universal Life policy works and whether it could fit your retirement plan.</p>
 
-    <p style="margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:${TEAL}">Your licensed professional</p>
-    ${agentCard(agent, siteUrl)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 26px;background:${MINT};border-radius:12px;border-left:5px solid ${TEAL}"><tr><td style="padding:18px 20px;font-family:Manrope,Arial,sans-serif;font-size:15px;line-height:1.55">
+      <strong style="color:${NAVY};font-size:16px">📞 Please answer when we call</strong><br>
+      Your agent may call or text from a number you don’t recognize. <strong>It’s not a spam call.</strong> It’s your RetireFlow partnered agent following up on your request.
+    </td></tr></table>
 
-    <p style="margin:30px 0 14px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:${TEAL}">Your next steps</p>
+    <p style="margin:0 0 14px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:${TEAL}">Your next steps</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-      ${stepRow(1, "Watch for a call, text, or email", `${who} will reach out within one business day${fromLine} to schedule your meeting. Tip: save their number so you don’t miss the call.`)}
-      ${stepRow(2, "Pick a time that works for you", "Your meeting is free, takes about 20–30 minutes, and can happen by phone or video, whichever you prefer.")}
-      ${stepRow(3, "Have your educational meeting", `You’ll learn how IULs work, including the upside, the trade-offs, and the costs, and talk through your goals${lead.goal ? ` (you told us: <em>${esc(lead.goal)}</em>)` : ""}. It’s <strong>strictly informational, not a sales call</strong>.`)}
-      ${stepRow(4, "Decide what’s right for you, on your timeline", "There’s <strong>no cost and no obligation to buy anything</strong>. Take whatever time you need, ask every question, and only move forward if it truly makes sense for you.")}
+      ${stepRow(1, "Watch for a call, text, or email", "One of our partnered licensed agents will reach out, usually within one business day, to set up a time that works for you.")}
+      ${stepRow(2, "Have your educational meeting", `It’s free and takes about 20–30 minutes by phone or video. You’ll learn how IULs work, including the upside, the trade-offs, and the costs, and talk through your goals${lead.goal ? ` (you told us: <em>${esc(lead.goal)}</em>)` : ""}. It’s <strong>strictly informational, not a sales call</strong>.`)}
+      ${stepRow(3, "Decide what’s right for you, on your timeline", "There’s <strong>no cost and no obligation to buy anything</strong>. Take whatever time you need, ask every question, and only move forward if it truly makes sense for you.")}
     </table>
-
-    ${booking}
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 26px;border:1px solid #e6e9ec;border-radius:12px"><tr><td style="padding:20px 22px;font-family:Manrope,Arial,sans-serif;font-size:15px;line-height:1.6">
       <strong style="color:${NAVY};font-size:16px">To get the most from your meeting, it helps to know:</strong>
@@ -114,29 +104,24 @@ export function leadConfirmationEmail({ lead, agent, siteUrl }) {
     ${button(pdfUrl, "Download the Free Playbook")}
     <p style="margin:10px 0 0;font-size:14px;color:${MUTED}">Or <a href="${esc(guideUrl)}" style="color:${TEAL};font-weight:700">read it online</a>.</p>
 
-    <p style="margin:28px 0 0">Questions before your meeting? Just reply to this email${agent.email ? `, and it goes straight to ${esc(isTeam ? "our team" : agent.name.split(" ")[0])}` : ""}.</p>
+    <p style="margin:28px 0 0">Questions in the meantime? Just reply to this email.</p>
     <p style="margin:18px 0 0">To your retirement,<br><strong>The RetireFlow Team</strong><br><span style="color:${MUTED};font-size:14px">Let’s plan a retirement that flows.</span></p>
     <p style="margin:24px 0 0;font-size:12px;color:${MUTED}">Changed your mind? No problem. Reply STOP to any text message to stop texts, or see the note below to stop emails.</p>`;
 
   return {
     subject: `${lead.first_name ? lead.first_name + ", here’s" : "Here’s"} what happens next with your free IUL review`,
-    html: layout({ siteUrl, preheader: `${isTeam ? "A licensed professional" : agent.name} will reach out within one business day to schedule your free educational meeting.`, body }),
+    html: layout({ siteUrl, preheader: "One of our partnered licensed agents will reach out within one business day. Please answer, it’s not spam.", body }),
     text: [
       `You're all set, ${lead.first_name || "there"}! Here's what happens next.`,
       ``,
-      `Thank you for requesting your free IUL review. We've matched you with a licensed insurance professional in ${lead.state || "your state"}.`,
+      `Thank you for requesting your free IUL review. We're connecting you with one of our partnered licensed insurance agents in ${lead.state || "your state"}.`,
       ``,
-      `YOUR LICENSED PROFESSIONAL`,
-      `${agent.name}, ${agent.title}${agent.npn ? ` (NPN ${agent.npn})` : ""}`,
-      agent.phone ? `Phone: ${agent.phone}` : null,
-      agent.email ? `Email: ${agent.email}` : null,
+      `PLEASE ANSWER WHEN WE CALL: your agent may call or text from a number you don't recognize. It's not a spam call. It's your RetireFlow partnered agent following up on your request.`,
       ``,
       `YOUR NEXT STEPS`,
-      `1. Watch for a call, text, or email. They'll reach out within one business day${agent.phone ? ` from ${agent.phone}` : ""} to schedule your meeting.`,
-      `2. Pick a time that works for you. The meeting is free, takes about 20-30 minutes, by phone or video.`,
-      `3. Have your educational meeting. Learn how IULs work, including the upside, the trade-offs, and the costs. It's strictly informational, not a sales call.`,
-      `4. Decide on your timeline. There's no cost and no obligation to buy anything.`,
-      agent.bookingUrl ? `\nPrefer to pick your own time? Book here: ${agent.bookingUrl}` : null,
+      `1. Watch for a call, text, or email. A partnered licensed agent will reach out, usually within one business day, to set up a time that works for you.`,
+      `2. Have your educational meeting. It's free, about 20-30 minutes by phone or video, and strictly informational, not a sales call.`,
+      `3. Decide on your timeline. There's no cost and no obligation to buy anything.`,
       ``,
       `TO PREPARE (ballpark numbers are fine): what you've saved for retirement today, what you could set aside each month, and when you'd like to retire.`,
       ``,
@@ -148,7 +133,7 @@ export function leadConfirmationEmail({ lead, agent, siteUrl }) {
       `The RetireFlow Team`,
       ``,
       `Changed your mind? Reply STOP to any text or "unsubscribe" to this email.`,
-    ].filter((l) => l !== null).join("\n"),
+    ].join("\n"),
   };
 }
 
@@ -172,7 +157,7 @@ export function agentNotificationEmail({ lead, agent, siteUrl, submittedAt }) {
     .join("");
   const body = `
     <h1 style="margin:0 0 6px;font-size:22px;color:${NAVY};font-weight:800">New IUL lead: ${esc(lead.first_name)} ${esc(lead.last_name)} (${esc(lead.state)})</h1>
-    <p style="margin:0 0 18px;color:${MUTED}">They’ve been emailed your contact info and told to expect outreach within one business day.</p>
+    <p style="margin:0 0 18px;color:${MUTED}">They’ve received a generic confirmation (your name and number were not shared). They were told a partnered agent will reach out within one business day, possibly from an unfamiliar number, and to answer.</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${table}</table>
     <p style="margin:22px 0 0">${lead.phone ? `<a href="tel:${esc(String(lead.phone).replace(/[^\d+]/g, ""))}" style="color:${TEAL};font-weight:700">Call now</a> · ` : ""}<a href="mailto:${esc(lead.email)}" style="color:${TEAL};font-weight:700">Email</a></p>`;
   return {

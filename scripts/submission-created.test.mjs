@@ -67,6 +67,17 @@ test("consultation: confirmation to lead, alert to agent + notify, row in sheet"
   assert.equal(row.utm_source, "facebook");
 });
 
+test("lead confirmation is generic: no agent details, no booking, not-spam note", async () => {
+  await handler(event("iul-consultation", consult));
+  const confirm = emails[0].body;
+  for (const content of [confirm.html, confirm.text]) {
+    assert.match(content, /partnered licensed/);
+    assert.match(content, /not a spam call/);
+    assert.doesNotMatch(content, /team@getretireflow\.com|RetireFlow Team<\/div>|NPN|Schedule My Meeting|calendly|Book (My|a)/i);
+  }
+  assert.equal(confirm.reply_to, undefined);
+});
+
 test("guide request: guide email, branded alert to notify, row in sheet", async () => {
   const res = await handler(event("guide-request", { first_name: "Sam", email: "sam@example.com" }));
   assert.equal(res.statusCode, 200);

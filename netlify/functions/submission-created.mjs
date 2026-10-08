@@ -129,11 +129,11 @@ export const handler = async (event) => {
   } else if (formName === "iul-consultation") {
     const submittedAt = new Date(createdAt).toLocaleString("en-US", { timeZone: "America/New_York" }) + " ET";
 
-    const confirm = leadConfirmationEmail({ lead, agent, siteUrl });
+    const confirm = leadConfirmationEmail({ lead, siteUrl });
     jobs.push(sendEmail({
       from,
       to: [lead.email],
-      reply_to: agent.email || process.env.EMAIL_REPLY_TO || undefined,
+      reply_to: process.env.EMAIL_REPLY_TO || undefined, // generic: replies go to RetireFlow, not the agent
       subject: confirm.subject,
       html: confirm.html,
       text: confirm.text,
