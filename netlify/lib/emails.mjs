@@ -26,7 +26,7 @@ function button(href, label) {
   </td></tr></table>`;
 }
 
-function layout({ siteUrl, preheader, body }) {
+function layout({ siteUrl, preheader, body, internal = false }) {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RetireFlow</title></head>
 <body style="margin:0;padding:0;background:${MINT}">
 <span style="display:none!important;opacity:0;color:transparent;height:0;width:0;overflow:hidden">${esc(preheader)}</span>
@@ -37,28 +37,15 @@ function layout({ siteUrl, preheader, body }) {
     <tr><td style="background:#ffffff;border-radius:16px;border-top:6px solid ${TEAL};padding:36px 32px;font-family:Manrope,Arial,sans-serif;font-size:16px;line-height:1.6;color:#1d2733">
       ${body}
     </td></tr>
-    <tr><td style="padding:22px 16px;font-family:Manrope,Arial,sans-serif;font-size:11px;line-height:1.55;color:${MUTED};text-align:center">
+    ${internal
+      ? `<tr><td style="padding:22px 16px;font-family:Manrope,Arial,sans-serif;font-size:11px;line-height:1.55;color:${MUTED};text-align:center">Internal lead alert from your RetireFlow landing page. Contains personal information; please don’t forward outside your team.</td></tr>`
+      : `<tr><td style="padding:22px 16px;font-family:Manrope,Arial,sans-serif;font-size:11px;line-height:1.55;color:${MUTED};text-align:center">
       You’re receiving this because you requested information at ${esc(siteUrl.replace(/^https?:\/\//, ""))}.<br>
       RetireFlow connects consumers with independent licensed insurance professionals. Indexed Universal Life is a life insurance product, not a stock market investment. Policy loans and withdrawals reduce cash value and death benefit and may have tax consequences. This is not tax or legal advice.<br><br>
       Don’t want these emails? Just reply “unsubscribe.”
-    </td></tr>
+    </td></tr>`}
   </table>
 </td></tr></table></body></html>`;
-}
-
-function agentCard(agent, siteUrl) {
-  const photo = agent.photo
-    ? `<td width="76" valign="top" style="padding-right:16px"><img src="${esc(abs(siteUrl, agent.photo))}" width="72" height="72" alt="${esc(agent.name)}" style="display:block;border-radius:50%;object-fit:cover"></td>`
-    : "";
-  const lines = [
-    `<div style="font-size:19px;font-weight:800;color:${NAVY}">${esc(agent.name)}</div>`,
-    `<div style="color:${MUTED};font-size:14px">${esc(agent.title)}${agent.npn ? ` · NPN ${esc(agent.npn)}` : ""}</div>`,
-    agent.phone ? `<div style="margin-top:8px">📞 <a href="tel:${esc(agent.phone.replace(/[^\d+]/g, ""))}" style="color:${TEAL};font-weight:700;text-decoration:none">${esc(agent.phone)}</a></div>` : "",
-    agent.email ? `<div>✉️ <a href="mailto:${esc(agent.email)}" style="color:${TEAL};font-weight:700;text-decoration:none">${esc(agent.email)}</a></div>` : "",
-  ].join("");
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${MINT};border-radius:12px;border-left:5px solid ${TEAL}">
-    <tr><td style="padding:20px"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>${photo}<td valign="top" style="font-family:Manrope,Arial,sans-serif;font-size:15px;line-height:1.55">${lines}</td></tr></table></td></tr>
-  </table>`;
 }
 
 // --- 1. Lead confirmation: "Here's what happens next" ----------------------
@@ -157,12 +144,12 @@ export function agentNotificationEmail({ lead, agent, siteUrl, submittedAt }) {
     .join("");
   const body = `
     <h1 style="margin:0 0 6px;font-size:22px;color:${NAVY};font-weight:800">New IUL lead: ${esc(lead.first_name)} ${esc(lead.last_name)} (${esc(lead.state)})</h1>
-    <p style="margin:0 0 18px;color:${MUTED}">They’ve received a generic confirmation (your name and number were not shared). They were told a partnered agent will reach out within one business day, possibly from an unfamiliar number, and to answer.</p>
+    <p style="margin:0 0 18px;color:${MUTED}">The lead received a generic confirmation email that doesn’t name the agent. It tells them a partnered licensed agent will reach out within one business day, possibly from an unfamiliar number, and asks them to answer.</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${table}</table>
     <p style="margin:22px 0 0">${lead.phone ? `<a href="tel:${esc(String(lead.phone).replace(/[^\d+]/g, ""))}" style="color:${TEAL};font-weight:700">Call now</a> · ` : ""}<a href="mailto:${esc(lead.email)}" style="color:${TEAL};font-weight:700">Email</a></p>`;
   return {
     subject: `New IUL lead: ${lead.first_name || ""} ${lead.last_name || ""} (${lead.state || "?"}) → ${agent.name}`,
-    html: layout({ siteUrl, preheader: `New lead from the IUL landing page`, body }),
+    html: layout({ siteUrl, preheader: `New lead from the IUL landing page`, body, internal: true }),
     text: rows.map(([k, v]) => `${k}: ${v || "-"}`).join("\n"),
   };
 }
@@ -211,7 +198,7 @@ export function guideAlertEmail({ lead, siteUrl, submittedAt }) {
     <p style="margin:22px 0 0"><a href="mailto:${esc(lead.email)}" style="color:${TEAL};font-weight:700">Email ${esc(lead.first_name || "them")}</a></p>`;
   return {
     subject: `New guide download: ${lead.first_name || ""} <${lead.email}>`.replace(/\s+</, " <"),
-    html: layout({ siteUrl, preheader: "Someone just downloaded the IUL Retirement Playbook", body }),
+    html: layout({ siteUrl, preheader: "Someone just downloaded the IUL Retirement Playbook", body, internal: true }),
     text: rows.map(([k, v]) => `${k}: ${v || "-"}`).join("\n"),
   };
 }

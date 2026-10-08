@@ -78,6 +78,15 @@ test("lead confirmation is generic: no agent details, no booking, not-spam note"
   assert.equal(confirm.reply_to, undefined);
 });
 
+test("footers: customer emails vs internal alerts", async () => {
+  await handler(event("iul-consultation", consult));
+  const [confirm, alert] = emails.map((e) => e.body.html);
+  assert.match(confirm, /requested information at iul\.example\.com\./);
+  assert.doesNotMatch(confirm, /\$\{|Internal lead alert/);
+  assert.match(alert, /Internal lead alert/);
+  assert.doesNotMatch(alert, /requested information|\$\{/);
+});
+
 test("guide request: guide email, branded alert to notify, row in sheet", async () => {
   const res = await handler(event("guide-request", { first_name: "Sam", email: "sam@example.com" }));
   assert.equal(res.statusCode, 200);
