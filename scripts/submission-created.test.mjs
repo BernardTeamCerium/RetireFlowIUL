@@ -1,15 +1,19 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { handler } from "../netlify/functions/submission-created.mjs";
 import { assignAgent } from "../netlify/lib/agents.mjs";
 
 const SHEET_URL = "https://script.google.com/macros/s/abc/exec";
-let emails, sheetRows, sheetResponse;
+let emails, sheetRows, sheetResponse, metaCalls;
 
 beforeEach(() => {
   emails = [];
   sheetRows = [];
   sheetResponse = { ok: true };
+  metaCalls = [];
+  delete process.env.META_PIXEL_ID;
+  delete process.env.META_CAPI_TOKEN;
   Object.assign(process.env, {
     RESEND_API_KEY: "re_test",
     EMAIL_FROM: "RetireFlow <hello@getretireflow.com>",
@@ -22,6 +26,10 @@ beforeEach(() => {
     if (url === SHEET_URL) {
       sheetRows.push(JSON.parse(init.body));
       return new Response(JSON.stringify(sheetResponse), { status: 200 });
+    }
+    if (url.startsWith("https://graph.facebook.com/")) {
+      metaCalls.push({ url, body: JSON.parse(init.body) });
+      return new Response(JSON.stringify({ events_received: 1 }), { status: 200 });
     }
     emails.push({ url, headers: init.headers, body: JSON.parse(init.body) });
     return new Response(JSON.stringify({ id: "email_" + emails.length }), { status: 200 });
@@ -118,6 +126,38 @@ test("unknown forms are ignored", async () => {
   const res = await handler(event("other-form", { email: "x@y.co" }));
   assert.equal(res.statusCode, 200);
   assert.equal(emails.length + sheetRows.length, 0);
+});
+
+test("Meta CAPI: Lead event with hashed contact data and shared event_id", async () => {
+  process.env.META_PIXEL_ID = "999";
+  process.env.META_CAPI_TOKEN = "tok";
+  const res = await handler(event("iul-consultation", { ...consult, meta_event_id: "evt-1", fbp: "fb.1.1.2", fbc: "fb.1.3.abc", ip: "1.2.3.4", user_agent: "UA", landing_page: "https://iul.example.com/?utm_source=fb" }));
+  assert.equal(res.statusCode, 200);
+  assert.equal(metaCalls.length, 1);
+  assert.match(metaCalls[0].url, /graph\.facebook\.com\/v\d+\.0\/999\/events\?access_token=tok/);
+  const ev = metaCalls[0].body.data[0];
+  assert.equal(ev.event_name, "Lead");
+  assert.equal(ev.event_id, "evt-1");
+  assert.equal(ev.action_source, "website");
+  assert.equal(ev.event_time, 1791374400);
+  const sha = (v) => createHash("sha256").update(v).digest("hex");
+  assert.deepEqual(ev.user_data.em, [sha("pat@example.com")]);
+  assert.deepEqual(ev.user_data.ph, [sha("15555551212")]);
+  assert.deepEqual(ev.user_data.fn, [sha("pat")]);
+  assert.deepEqual(ev.user_data.st, [sha("tx")]);
+  assert.equal(ev.user_data.fbc, "fb.1.3.abc");
+  assert.equal(ev.user_data.client_ip_address, "1.2.3.4");
+  const json = JSON.stringify(metaCalls[0].body);
+  assert.doesNotMatch(json, /pat@example\.com|Tax-free|50–59/); // no raw PII or financial details
+});
+
+test("Meta CAPI: guide request sends CompleteRegistration; skipped when not configured", async () => {
+  await handler(event("guide-request", { first_name: "Sam", email: "sam@example.com" }));
+  assert.equal(metaCalls.length, 0);
+  process.env.META_PIXEL_ID = "999";
+  process.env.META_CAPI_TOKEN = "tok";
+  await handler(event("guide-request", { first_name: "Sam", email: "sam@example.com" }));
+  assert.equal(metaCalls[0].body.data[0].event_name, "CompleteRegistration");
 });
 
 test("agent routing prefers state-licensed agents and is stable", () => {

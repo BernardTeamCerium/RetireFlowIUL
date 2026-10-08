@@ -75,6 +75,29 @@ Submit both forms on the live site with your own email. Check that:
 
 If something's missing, check **Netlify → Logs → Functions → submission-created**, the **Resend → Emails** log, and **Apps Script → Executions**.
 
+## Meta (Facebook/Instagram) conversion tracking
+
+Conversions are tracked two ways that share one event ID, so Meta counts each lead **once**:
+- **Meta Pixel** (browser): `PageView` on every page, plus a conversion on the page after a successful opt-in.
+- **Conversions API** (server, from `submission-created`): the same conversion, so leads still count when the Pixel is blocked by ad blockers or iOS privacy features.
+
+| Form | Meta event | Use it to |
+|---|---|---|
+| Free review (`iul-consultation`) | **Lead** | Optimize your campaigns for this one |
+| Free guide (`guide-request`) | **CompleteRegistration** | Track guide downloads separately |
+
+**Setup**
+1. **Meta Events Manager → Connect data → Web** → create a dataset (pixel). Copy its **ID**.
+2. Paste the ID into `public/assets/tracking.js`: `var RF_META_PIXEL_ID = "your-id";`
+3. In Events Manager → your dataset → **Settings → Conversions API → Generate access token**.
+4. In Netlify, add `META_PIXEL_ID` (same ID) and `META_CAPI_TOKEN` (the token), then redeploy.
+5. **Test:** Events Manager → **Test events**. Copy the test code into a Netlify variable `META_TEST_EVENT_CODE`, redeploy, open your site, and submit a form. You should see the `Lead` event from both **Browser** and **Server**, marked *Deduplicated*. Then delete `META_TEST_EVENT_CODE` and redeploy.
+6. In Ads Manager, choose the **Leads** objective with a **Website** conversion location and the **Lead** event.
+
+**Ad links:** add UTM tags to your ad URLs, e.g. `?utm_source=facebook&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}`. They show up in the lead alert email and the Google Sheet. Meta's click ID (`fbclid`) is captured automatically.
+
+**Privacy:** only hashed email, phone, name, state and country are sent to Meta, plus browser and click IDs. Age and financial goals are never sent. Meta treats insurance ads as a **Special Ad Category (Financial products and services)**, which limits targeting by age, gender and ZIP code. Select it when you create the campaign.
+
 ## Before you launch: compliance checklist
 Insurance marketing is regulated. Have your compliance or legal contact (or your IMO/carrier) review:
 - [ ] The consent language on both forms (in `public/index.html`). If you change it, update the `consent_version` hidden fields so each lead records which wording they agreed to

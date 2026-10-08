@@ -29,6 +29,16 @@
     });
   }
 
+  function cookie(name) {
+    var m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : "";
+  }
+
+  function setField(form, name, value) {
+    var input = form.querySelector('input[name="' + name + '"]');
+    if (input) input.value = value || "";
+  }
+
   function errorEl(form) {
     return form.querySelector(".form-error") || (form.nextElementSibling && form.nextElementSibling.classList.contains("form-error") ? form.nextElementSibling : null);
   }
@@ -60,11 +70,21 @@
     btn.disabled = true;
     btn.textContent = "Sending…";
 
+    // Meta: a shared event ID lets Meta de-duplicate the browser Pixel event
+    // and the server-side Conversions API event for this lead.
+    var eventId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+    var fbc = cookie("_fbc");
+    try { fbc = fbc || sessionStorage.getItem("rf_fbc") || ""; } catch (e5) {}
+    setField(form, "meta_event_id", eventId);
+    setField(form, "fbp", cookie("_fbp"));
+    setField(form, "fbc", fbc);
+
     var data = new FormData(form);
     var body = new URLSearchParams(data).toString();
     try {
       sessionStorage.setItem("rf_first_name", data.get("first_name") || "");
       sessionStorage.setItem("rf_auto_download", "1"); // the next page starts the guide download
+      sessionStorage.setItem("rf_meta_event", JSON.stringify({ form: data.get("form-name"), id: eventId })); // the next page fires the conversion
     } catch (e2) {}
 
     fetch("/", {
@@ -118,6 +138,17 @@
     var n = "";
     try { n = sessionStorage.getItem("rf_first_name") || ""; } catch (e3) {}
     if (n) nameSlot.textContent = ", " + n.trim().split(" ")[0];
+  }
+
+  // ---- Meta conversion: fire once, on the page after a successful opt-in ---
+  var metaEvent = null;
+  try { metaEvent = JSON.parse(sessionStorage.getItem("rf_meta_event") || "null"); sessionStorage.removeItem("rf_meta_event"); } catch (e6) {}
+  if (metaEvent && window.rfTrack) {
+    if (metaEvent.form === "iul-consultation") {
+      window.rfTrack("Lead", { content_name: "IUL Free Review", content_category: "IUL" }, metaEvent.id);
+    } else if (metaEvent.form === "guide-request") {
+      window.rfTrack("CompleteRegistration", { content_name: "IUL Retirement Playbook", content_category: "IUL" }, metaEvent.id);
+    }
   }
 
   // ---- Auto-download the guide right after an opt-in -----------------------

@@ -10,12 +10,16 @@
 //   LEADS_NOTIFY_EMAIL         Comma-separated addresses that get every new-lead alert
 //   GOOGLE_SHEETS_WEBHOOK_URL  Apps Script web app URL (see google-sheets/Code.gs)
 //   GOOGLE_SHEETS_SECRET       Must match SECRET in google-sheets/Code.gs
+//   META_PIXEL_ID              Meta Pixel / dataset ID (same as in public/assets/tracking.js)
+//   META_CAPI_TOKEN            Conversions API access token (Events Manager → Settings)
+//   META_TEST_EVENT_CODE       Optional: code from Events Manager → Test events, while testing
 // Optional:
 //   EMAIL_REPLY_TO             Fallback reply-to address
 //   SITE_URL                   Public URL used in email links (defaults to Netlify's URL)
 
 import { assignAgent } from "../lib/agents.mjs";
 import { leadConfirmationEmail, agentNotificationEmail, guideEmail, guideAlertEmail } from "../lib/emails.mjs";
+import { buildMetaEvent, sendMetaEvent } from "../lib/meta.mjs";
 
 const RESEND_URL = "https://api.resend.com/emails";
 const LEAD_TYPES = { "iul-consultation": "Consultation", "guide-request": "Guide Download" };
@@ -105,6 +109,18 @@ export const handler = async (event) => {
     }));
   } else {
     console.warn("GOOGLE_SHEETS_WEBHOOK_URL / GOOGLE_SHEETS_SECRET not set; lead not added to sheet.");
+  }
+
+  // --- Meta Conversions API ------------------------------------------------
+  if (process.env.META_PIXEL_ID && process.env.META_CAPI_TOKEN) {
+    const metaEvent = buildMetaEvent({ formName, lead, createdAt });
+    if (metaEvent) {
+      jobs.push(sendMetaEvent(metaEvent, {
+        pixelId: process.env.META_PIXEL_ID,
+        accessToken: process.env.META_CAPI_TOKEN,
+        testEventCode: process.env.META_TEST_EVENT_CODE,
+      }));
+    }
   }
 
   // --- Emails ---------------------------------------------------------------
