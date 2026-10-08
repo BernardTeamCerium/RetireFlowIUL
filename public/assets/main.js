@@ -140,15 +140,26 @@
     if (n) nameSlot.textContent = ", " + n.trim().split(" ")[0];
   }
 
-  // ---- Meta conversion: fire once, on the page after a successful opt-in ---
-  var metaEvent = null;
-  try { metaEvent = JSON.parse(sessionStorage.getItem("rf_meta_event") || "null"); sessionStorage.removeItem("rf_meta_event"); } catch (e6) {}
-  if (metaEvent && window.rfTrack) {
-    if (metaEvent.form === "iul-consultation") {
-      window.rfTrack("Lead", { content_name: "IUL Free Review", content_category: "IUL" }, metaEvent.id);
-    } else if (metaEvent.form === "guide-request") {
-      window.rfTrack("CompleteRegistration", { content_name: "IUL Retirement Playbook", content_category: "IUL" }, metaEvent.id);
-    }
+  // ---- Meta conversion: fired by the page people land on after opting in ----
+  // /thank-you/ always fires Lead; /guide/?welcome=1 fires CompleteRegistration.
+  // The event ID from the form (shared with the server-side Conversions API
+  // event) is reused if available and kept for the session, so refreshing the
+  // page sends the same ID and Meta de-duplicates it instead of double counting.
+  var path = window.location.pathname;
+  var conversion = null;
+  if (/^\/thank-you\/?$/.test(path)) {
+    conversion = { form: "iul-consultation", name: "Lead", params: { content_name: "IUL Free Review", content_category: "IUL" } };
+  } else if (/^\/guide\/?$/.test(path) && new URLSearchParams(window.location.search).get("welcome")) {
+    conversion = { form: "guide-request", name: "CompleteRegistration", params: { content_name: "IUL Retirement Playbook", content_category: "IUL" } };
+  }
+  if (conversion && window.rfTrack) {
+    var stored = null;
+    try { stored = JSON.parse(sessionStorage.getItem("rf_meta_event") || "null"); } catch (e6) {}
+    var id = stored && stored.form === conversion.form && stored.id
+      ? stored.id
+      : ((window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+    try { sessionStorage.setItem("rf_meta_event", JSON.stringify({ form: conversion.form, id: id })); } catch (e7) {}
+    window.rfTrack(conversion.name, conversion.params, id);
   }
 
   // ---- Auto-download the guide right after an opt-in -----------------------
